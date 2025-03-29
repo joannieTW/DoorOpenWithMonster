@@ -52,6 +52,9 @@ export default function Monster({ isVisible }: MonsterProps) {
             "transition-transform duration-300 origin-[25px_45px]",
             isWaving && "animate-[wave_0.5s_ease-in-out_infinite_alternate]"
           )}
+          style={{
+            transformOrigin: "25px 45px"
+          }}
         >
           <path d="M 25 45 L 5 25" stroke="#6366f1" strokeWidth="10" strokeLinecap="round" />
           <path d="M 5 25 L 0 15" stroke="#6366f1" strokeWidth="8" strokeLinecap="round" />
@@ -60,18 +63,6 @@ export default function Monster({ isVisible }: MonsterProps) {
         {/* Monster other arm */}
         <path d="M 75 45 L 95 55" stroke="#6366f1" strokeWidth="10" strokeLinecap="round" />
       </svg>
-      
-      {/* Add the wave animation */}
-      <style jsx>{`
-        @keyframes wave {
-          0% {
-            transform: rotate(0deg);
-          }
-          100% {
-            transform: rotate(30deg);
-          }
-        }
-      `}</style>
     </div>
   );
 }

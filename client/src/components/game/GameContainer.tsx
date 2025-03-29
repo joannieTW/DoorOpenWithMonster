@@ -22,16 +22,16 @@ export default function GameContainer() {
         setDoorOpen(true);
       }, 300);
       
-      // Show monster with a delay after door opens
+      // Show monster with a delay after door opens - longer delay to account for new animation
       setTimeout(() => {
         setMonsterVisible(true);
         playSuccess();
-      }, 1000);
+      }, 1300);
       
       // End the game state after animation completes
       setTimeout(() => {
         end();
-      }, 2000);
+      }, 2500);
     }
   };
 

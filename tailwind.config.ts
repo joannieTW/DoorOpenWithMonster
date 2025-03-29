@@ -10,6 +10,13 @@ export default {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      perspective: {
+        'none': 'none',
+        '500': '500px',
+        '800': '800px',
+        '1000': '1000px',
+        '1500': '1500px',
+      },
       colors: {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",

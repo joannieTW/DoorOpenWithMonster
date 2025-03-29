@@ -17,7 +17,7 @@ export default function DoorbellButton({
   const { toggleMute, isMuted } = useAudio();
   
   return (
-    <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4">
+    <div className="absolute bottom-[-80px] left-1/2 -translate-x-1/2 flex flex-col items-center gap-4">
       {phase === "ready" && (
         <Button 
           onClick={onDoorbellClick}

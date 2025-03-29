@@ -28,3 +28,26 @@ canvas {
   height: 100% !important;
   touch-action: none;
 }
+
+/* Custom perspective utilities */
+@layer utilities {
+  .perspective-500 {
+    perspective: 500px;
+  }
+  .perspective-800 {
+    perspective: 800px;
+  }
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+}
+
+/* Monster wave animation */
+@keyframes wave {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(30deg);
+  }
+}

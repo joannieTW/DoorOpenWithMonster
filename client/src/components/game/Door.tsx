@@ -7,37 +7,33 @@ interface DoorProps {
 export default function Door({ isOpen }: DoorProps) {
   return (
     <div className="absolute w-[200px] h-[350px] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-      {/* Door frame */}
-      <div className="absolute inset-0 bg-accent rounded-t-lg border-4 border-primary" />
+      {/* Door frame - this stays fixed */}
+      <div className="absolute inset-0 bg-red-900 rounded-t-lg border-4 border-red-950">
+        {/* Door frame inner shadow */}
+        <div className="absolute inset-[3px] border-2 border-red-800 rounded-t-lg opacity-50" />
+      </div>
       
-      {/* The actual door that opens */}
+      {/* Door that opens */}
       <div 
         className={cn(
-          "absolute inset-0 bg-primary rounded-t-lg border-2 border-accent shadow-md transition-transform duration-700 origin-left",
-          isOpen ? "rotate-[70deg]" : "rotate-0"
+          "absolute inset-[15px] bg-red-700 rounded-sm border-2 border-red-800 shadow-md transition-all duration-700 origin-left",
+          isOpen ? "rotate-[80deg] translate-x-[-10px]" : "rotate-0"
         )}
+        style={{
+          // Add door hinge effect
+          transformOrigin: "0% 50%"
+        }}
       >
-        {/* Door handle */}
-        <div className="absolute right-4 top-1/2 w-3 h-12 bg-yellow-400 rounded-full" />
+        {/* Door panels */}
+        <div className="absolute inset-[20px] top-[20px] bottom-[60%] border-2 border-red-800 rounded-t-lg" />
+        <div className="absolute inset-[20px] top-[45%] bottom-[20px] border-2 border-red-800 rounded-b-lg" />
+        
+        {/* Door handle (knob) */}
+        <div className="absolute right-3 top-1/2 w-5 h-5 bg-yellow-500 rounded-full border border-yellow-600 shadow-sm" />
       </div>
       
       {/* Doorstep */}
-      <div className="absolute bottom-0 translate-y-full w-full h-4 bg-muted-foreground rounded-b-sm" />
-      
-      {/* SVG door design */}
-      <svg 
-        className={cn(
-          "absolute inset-0 w-full h-full transition-transform duration-700 origin-left",
-          isOpen ? "rotate-[70deg]" : "rotate-0"
-        )}
-        viewBox="0 0 100 175" 
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        {/* Door panels */}
-        <rect x="10" y="10" width="80" height="40" rx="2" fill="none" stroke="currentColor" strokeWidth="1" className="text-accent-foreground" />
-        <rect x="10" y="60" width="80" height="40" rx="2" fill="none" stroke="currentColor" strokeWidth="1" className="text-accent-foreground" />
-        <rect x="10" y="110" width="80" height="55" rx="2" fill="none" stroke="currentColor" strokeWidth="1" className="text-accent-foreground" />
-      </svg>
+      <div className="absolute bottom-0 translate-y-full w-full h-4 bg-red-950 rounded-b-sm" />
     </div>
   );
 }

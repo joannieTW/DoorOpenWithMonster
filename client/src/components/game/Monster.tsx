@@ -25,8 +25,8 @@ export default function Monster({ isVisible }: MonsterProps) {
   return (
     <div 
       className={cn(
-        "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 transition-opacity duration-500",
-        isVisible ? "opacity-100" : "opacity-0 pointer-events-none"
+        "absolute left-[55%] top-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 transition-all duration-500",
+        isVisible ? "opacity-100 scale-100" : "opacity-0 scale-90 pointer-events-none"
       )}
     >
       <svg
@@ -43,13 +43,13 @@ export default function Monster({ isVisible }: MonsterProps) {
         <circle cx="35" cy="40" r="4" fill="black" />
         <circle cx="65" cy="40" r="4" fill="black" />
         
-        {/* Monster mouth */}
-        <path d="M 30 65 Q 50 80 70 65" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" />
+        {/* Monster mouth - smile */}
+        <path d="M 30 60 Q 50 75 70 60" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" />
         
         {/* Monster arm that waves */}
         <g 
           className={cn(
-            "transition-transform duration-300 origin-[25px_45px]",
+            "transition-transform duration-300",
             isWaving && "animate-[wave_0.5s_ease-in-out_infinite_alternate]"
           )}
           style={{

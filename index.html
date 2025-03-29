@@ -25,6 +25,99 @@
         align-items: center;
       }
       
+      /* Tutorial pop-up styles */
+      .tutorial-popup {
+        position: absolute;
+        background-color: white;
+        border-radius: 12px;
+        padding: 16px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        max-width: 300px;
+        z-index: 100;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.3s ease;
+        pointer-events: none;
+      }
+      
+      .tutorial-popup.visible {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: all;
+      }
+      
+      .tutorial-popup::before {
+        content: '';
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        background-color: white;
+        transform: rotate(45deg);
+      }
+      
+      .tutorial-popup.top::before {
+        bottom: -10px;
+        left: calc(50% - 10px);
+      }
+      
+      .tutorial-popup.bottom::before {
+        top: -10px;
+        left: calc(50% - 10px);
+      }
+      
+      .tutorial-popup.left::before {
+        right: -10px;
+        top: calc(50% - 10px);
+      }
+      
+      .tutorial-popup.right::before {
+        left: -10px;
+        top: calc(50% - 10px);
+      }
+      
+      .tutorial-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 12px;
+      }
+      
+      .tutorial-monster {
+        width: 40px;
+        height: 40px;
+        margin-right: 12px;
+        flex-shrink: 0;
+      }
+      
+      .tutorial-title {
+        font-weight: 700;
+        color: #4f46e5;
+        font-size: 18px;
+      }
+      
+      .tutorial-content {
+        color: #4b5563;
+        font-size: 14px;
+        line-height: 1.5;
+        margin-bottom: 16px;
+      }
+      
+      .tutorial-button {
+        background-color: #4f46e5;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 6px 12px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        float: right;
+      }
+      
+      .tutorial-button:hover {
+        background-color: #4338ca;
+      }
+      
       /* Container */
       .game-container {
         position: relative;
@@ -150,11 +243,24 @@
         opacity: 0;
         transition: all 0.5s ease;
         pointer-events: none;
+        cursor: default;
       }
       
       .monster.visible {
         opacity: 1;
         transform: translate(-50%, -50%) scale(1);
+        pointer-events: auto;
+        cursor: pointer;
+      }
+      
+      /* Monster animation when active */
+      @keyframes bounce {
+        0%, 100% { transform: translate(-50%, -50%) scale(1); }
+        50% { transform: translate(-50%, -50%) scale(1.05); }
+      }
+      
+      .monster.visible:hover {
+        animation: bounce 0.8s infinite;
       }
       
       /* Buttons */
@@ -316,6 +422,107 @@
         </button>
         <button class="sound-button" id="sound-button">🔊 Mute Sound</button>
       </div>
+      
+      <!-- Tutorial Pop-ups -->
+      <div id="welcome-popup" class="tutorial-popup bottom" style="top: 140px; left: 50%; transform: translateX(-50%) translateY(0px);">
+        <div class="tutorial-header">
+          <div class="tutorial-monster">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+              <circle cx="50" cy="50" r="40" fill="#6366f1" />
+              <circle cx="35" cy="40" r="8" fill="white" />
+              <circle cx="65" cy="40" r="8" fill="white" />
+              <circle cx="35" cy="40" r="4" fill="black" />
+              <circle cx="65" cy="40" r="4" fill="black" />
+              <path d="M 30 60 Q 50 75 70 60" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" />
+            </svg>
+          </div>
+          <div class="tutorial-title">Hi there!</div>
+        </div>
+        <div class="tutorial-content">
+          Welcome to my door! I'm hiding behind it. Can you ring the doorbell to meet me?
+        </div>
+        <button class="tutorial-button" id="welcome-next">Got it!</button>
+      </div>
+      
+      <div id="doorbell-popup" class="tutorial-popup bottom" style="bottom: 30px; left: 50%; transform: translateX(-50%) translateY(0px); opacity: 0;">
+        <div class="tutorial-header">
+          <div class="tutorial-monster">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+              <circle cx="50" cy="50" r="40" fill="#6366f1" />
+              <circle cx="35" cy="40" r="8" fill="white" />
+              <circle cx="65" cy="40" r="8" fill="white" />
+              <circle cx="35" cy="40" r="4" fill="black" />
+              <circle cx="65" cy="40" r="4" fill="black" />
+              <path d="M 30 60 Q 50 75 70 60" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" />
+            </svg>
+          </div>
+          <div class="tutorial-title">Ring me!</div>
+        </div>
+        <div class="tutorial-content">
+          Click the red doorbell button to see who's behind the door. I'm excited to meet you!
+        </div>
+        <button class="tutorial-button" id="doorbell-next">OK</button>
+      </div>
+      
+      <div id="monster-popup" class="tutorial-popup left" style="top: 50%; left: 60%; transform: translateY(-50%) translateX(0px); opacity: 0;">
+        <div class="tutorial-header">
+          <div class="tutorial-monster">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+              <circle cx="50" cy="50" r="40" fill="#6366f1" />
+              <circle cx="35" cy="40" r="8" fill="white" />
+              <circle cx="65" cy="40" r="8" fill="white" />
+              <circle cx="35" cy="40" r="4" fill="black" />
+              <circle cx="65" cy="40" r="4" fill="black" />
+              <path d="M 30 60 Q 50 75 70 60" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" />
+            </svg>
+          </div>
+          <div class="tutorial-title">Hello!</div>
+        </div>
+        <div class="tutorial-content">
+          It's me! I love when people visit. Thanks for ringing my doorbell!
+        </div>
+        <button class="tutorial-button" id="monster-next">Nice to meet you!</button>
+      </div>
+      
+      <div id="monster-interaction-popup" class="tutorial-popup left" style="top: 40%; left: 60%; transform: translateY(-50%) translateX(0px); opacity: 0;">
+        <div class="tutorial-header">
+          <div class="tutorial-monster">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+              <circle cx="50" cy="50" r="40" fill="#6366f1" />
+              <circle cx="35" cy="40" r="8" fill="white" />
+              <circle cx="65" cy="40" r="8" fill="white" />
+              <circle cx="35" cy="40" r="4" fill="black" />
+              <circle cx="65" cy="40" r="4" fill="black" />
+              <path d="M 30 60 Q 50 75 70 60" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" />
+            </svg>
+          </div>
+          <div class="tutorial-title">Psst!</div>
+        </div>
+        <div class="tutorial-content">
+          Try clicking on me! I might have something fun to say! 😉
+        </div>
+        <button class="tutorial-button" id="monster-interaction-next">I'll try it!</button>
+      </div>
+      
+      <div id="restart-popup" class="tutorial-popup bottom" style="bottom: 20px; left: 50%; transform: translateX(-50%) translateY(0px); opacity: 0;">
+        <div class="tutorial-header">
+          <div class="tutorial-monster">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+              <circle cx="50" cy="50" r="40" fill="#6366f1" />
+              <circle cx="35" cy="40" r="8" fill="white" />
+              <circle cx="65" cy="40" r="8" fill="white" />
+              <circle cx="35" cy="40" r="4" fill="black" />
+              <circle cx="65" cy="40" r="4" fill="black" />
+              <path d="M 30 60 Q 50 75 70 60" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" />
+            </svg>
+          </div>
+          <div class="tutorial-title">Want to try again?</div>
+        </div>
+        <div class="tutorial-content">
+          Click the green button to restart. I'll go hide behind the door again!
+        </div>
+        <button class="tutorial-button" id="restart-next">Let's do it!</button>
+      </div>
     </div>
 
     <script>
@@ -327,22 +534,106 @@
       const soundButton = document.getElementById('sound-button');
       const wavingArm = document.getElementById('waving-arm');
       
+      // Tutorial elements
+      const welcomePopup = document.getElementById('welcome-popup');
+      const doorbellPopup = document.getElementById('doorbell-popup');
+      const monsterPopup = document.getElementById('monster-popup');
+      const monsterInteractionPopup = document.getElementById('monster-interaction-popup');
+      const restartPopup = document.getElementById('restart-popup');
+      
+      // Tutorial buttons
+      const welcomeNext = document.getElementById('welcome-next');
+      const doorbellNext = document.getElementById('doorbell-next');
+      const monsterNext = document.getElementById('monster-next');
+      const monsterInteractionNext = document.getElementById('monster-interaction-next');
+      const restartNext = document.getElementById('restart-next');
+      
       // Game state
       let gamePhase = 'ready'; // ready, playing, ended
       let isMuted = false;
+      let hasSeenTutorial = false;
       
       // Audio elements
       const successSound = new Audio('https://cdn.freesound.org/previews/476/476178_6937556-lq.mp3');
+      const popupSound = new Audio('https://cdn.freesound.org/previews/347/347172_5260676-lq.mp3');
       successSound.volume = 0.5;
+      popupSound.volume = 0.3;
       
-      // Event listeners
+      // Event listeners for game
       doorbellButton.addEventListener('click', handleDoorbellClick);
       restartButton.addEventListener('click', handleRestartClick);
       soundButton.addEventListener('click', toggleMute);
       
+      // Event listeners for tutorial
+      welcomeNext.addEventListener('click', () => {
+        hidePopup(welcomePopup);
+        setTimeout(() => showPopup(doorbellPopup), 500);
+      });
+      
+      doorbellNext.addEventListener('click', () => {
+        hidePopup(doorbellPopup);
+      });
+      
+      monsterNext.addEventListener('click', () => {
+        hidePopup(monsterPopup);
+        setTimeout(() => showPopup(monsterInteractionPopup), 500);
+      });
+      
+      monsterInteractionNext.addEventListener('click', () => {
+        hidePopup(monsterInteractionPopup);
+        setTimeout(() => showPopup(restartPopup), 500);
+      });
+      
+      restartNext.addEventListener('click', () => {
+        hidePopup(restartPopup);
+      });
+      
+      // Initialize game and show first tutorial
+      initializeGame();
+      
+      function initializeGame() {
+        // Start with first tutorial popup
+        showPopup(welcomePopup);
+        hasSeenTutorial = true;
+      }
+      
+      // Helper function to show popup
+      function showPopup(popup) {
+        if (popup) {
+          popup.style.opacity = '1';
+          // Fix for different directions of popups
+          if (popup.classList.contains('bottom') || popup.classList.contains('top')) {
+            popup.style.transform = popup.style.transform.replace(/translateY\([^)]*\)/, 'translateY(0px)');
+          } else if (popup.classList.contains('left') || popup.classList.contains('right')) {
+            popup.style.transform = popup.style.transform.replace(/translateX\([^)]*\)/, 'translateX(0px)');
+          }
+          
+          popup.style.pointerEvents = 'all';
+          playPopupSound();
+        }
+      }
+      
+      // Helper function to hide popup
+      function hidePopup(popup) {
+        if (popup) {
+          popup.style.opacity = '0';
+          // Fix for different directions of popups
+          if (popup.classList.contains('bottom') || popup.classList.contains('top')) {
+            popup.style.transform = popup.style.transform.replace(/translateY\([^)]*\)/, 'translateY(20px)');
+          } else if (popup.classList.contains('left') || popup.classList.contains('right')) {
+            popup.style.transform = popup.style.transform.replace(/translateX\([^)]*\)/, 'translateX(20px)');
+          }
+          
+          popup.style.pointerEvents = 'none';
+        }
+      }
+      
       // Handle doorbell click
       function handleDoorbellClick() {
         if (gamePhase === 'ready') {
+          // Hide any visible popups
+          hidePopup(doorbellPopup);
+          
           gamePhase = 'playing';
           console.log('Game phase changed:', gamePhase);
           
@@ -359,6 +650,11 @@
             monster.classList.add('visible');
             wavingArm.classList.add('waving-arm');
             playSuccessSound();
+            
+            // Show monster popup after a brief delay
+            setTimeout(() => {
+              showPopup(monsterPopup);
+            }, 1000);
           }, 1000);
           
           // End the game state after animation completes
@@ -378,6 +674,11 @@
       // Handle restart click
       function handleRestartClick() {
         if (gamePhase === 'ended') {
+          // Hide all popups
+          hidePopup(monsterPopup);
+          hidePopup(monsterInteractionPopup);
+          hidePopup(restartPopup);
+          
           // Reset the states
           door.classList.remove('open');
           monster.classList.remove('visible');
@@ -396,6 +697,7 @@
       function toggleMute() {
         isMuted = !isMuted;
         successSound.muted = isMuted;
+        popupSound.muted = isMuted;
         
         if (isMuted) {
           soundButton.textContent = '🔇 Unmute Sound';
@@ -415,6 +717,74 @@
           console.log('Success sound skipped (muted)');
         }
       }
+      
+      // Play popup sound
+      function playPopupSound() {
+        if (!isMuted) {
+          popupSound.currentTime = 0;
+          popupSound.play().catch(e => console.error('Error playing popup sound:', e));
+        } else {
+          console.log('Popup sound skipped (muted)');
+        }
+      }
+      
+      // Add a fun easter egg - clicking on the monster
+      monster.addEventListener('click', () => {
+        if (monster.classList.contains('visible')) {
+          // Make the monster do a fun animation when clicked
+          monster.style.transform = 'translate(-50%, -50%) scale(1.2)';
+          monster.style.cursor = 'pointer';
+          playSuccessSound();
+          
+          // Show a special message when monster is clicked
+          const specialMessages = [
+            "Hehe, that tickles!",
+            "Hey there friend!",
+            "You found my ticklish spot!",
+            "High five!",
+            "I'm so happy you visited!",
+            "Ooh, that made me giggle!",
+            "We should hang out more often!",
+            "You're fun to play with!",
+            "Do you like my door? I painted it!",
+            "Boop! You got me!"
+          ];
+          
+          const randomMessage = specialMessages[Math.floor(Math.random() * specialMessages.length)];
+          
+          // Create a temporary message bubble
+          const messageBubble = document.createElement('div');
+          messageBubble.style.position = 'absolute';
+          messageBubble.style.top = '20%';
+          messageBubble.style.left = '60%';
+          messageBubble.style.background = 'white';
+          messageBubble.style.padding = '8px 12px';
+          messageBubble.style.borderRadius = '16px';
+          messageBubble.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
+          messageBubble.style.zIndex = '200';
+          messageBubble.style.opacity = '0';
+          messageBubble.style.transition = 'all 0.3s ease';
+          messageBubble.textContent = randomMessage;
+          
+          document.querySelector('.game-container').appendChild(messageBubble);
+          
+          // Fade in and then fade out
+          setTimeout(() => {
+            messageBubble.style.opacity = '1';
+          }, 10);
+          
+          setTimeout(() => {
+            messageBubble.style.opacity = '0';
+            setTimeout(() => {
+              messageBubble.remove();
+            }, 300);
+          }, 2000);
+          
+          setTimeout(() => {
+            monster.style.transform = 'translate(-50%, -50%) scale(1)';
+          }, 300);
+        }
+      });
     </script>
   </body>
 </html>

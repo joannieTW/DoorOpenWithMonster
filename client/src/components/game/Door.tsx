@@ -14,7 +14,7 @@ export default function Door({ isOpen }: DoorProps) {
       <div 
         className={cn(
           "absolute inset-0 bg-primary rounded-t-lg border-2 border-accent shadow-md transition-transform duration-700 origin-left",
-          isOpen ? "rotate-[85deg]" : "rotate-0"
+          isOpen ? "rotate-[70deg]" : "rotate-0"
         )}
       >
         {/* Door handle */}
@@ -28,7 +28,7 @@ export default function Door({ isOpen }: DoorProps) {
       <svg 
         className={cn(
           "absolute inset-0 w-full h-full transition-transform duration-700 origin-left",
-          isOpen ? "rotate-[85deg]" : "rotate-0"
+          isOpen ? "rotate-[70deg]" : "rotate-0"
         )}
         viewBox="0 0 100 175" 
         xmlns="http://www.w3.org/2000/svg"

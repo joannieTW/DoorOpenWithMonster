@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <title>Interactive Door Game</title>
+    <style>
+      /* Reset */
+      *, *::before, *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        background-color: #f5f5f5;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      
+      /* Container */
+      .game-container {
+        position: relative;
+        width: 100%;
+        max-width: 500px;
+        height: 500px;
+        margin: 0 auto;
+      }
+      
+      /* Background wall */
+      .wall {
+        position: absolute;
+        inset: 0;
+        background-color: #585b70;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      
+      /* Door frame */
+      .door-frame {
+        position: absolute;
+        width: 240px;
+        height: 380px;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        perspective: 1000px;
+      }
+      
+      .door-frame-outer {
+        position: absolute;
+        inset: 0;
+        background-color: #4c1d24;
+        border-radius: 8px;
+        border: 1px solid #3a1a1f;
+        overflow: hidden;
+      }
+      
+      .door-frame-inner {
+        position: absolute;
+        inset: 10px;
+        background-color: #6e2633;
+        border-radius: 6px;
+        border: 2px solid #5a1f2a;
+        overflow: hidden;
+      }
+      
+      .door-frame-shadow {
+        position: absolute;
+        inset: 0;
+        background-color: rgba(29, 15, 16, 0.8);
+      }
+      
+      /* Door */
+      .door {
+        position: absolute;
+        inset: 15px;
+        background-color: #9e2b3b;
+        border-radius: 6px;
+        border: 2px solid #7e2230;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        transition: transform 0.7s ease-in-out;
+        transform-origin: 0% 50%;
+        transform: perspective(1000px) rotateY(0deg);
+      }
+      
+      .door.open {
+        transform: perspective(1000px) rotateY(-85deg);
+      }
+      
+      /* Door panels */
+      .door-panel-top {
+        position: absolute;
+        inset: 20px;
+        top: 20px;
+        bottom: 60%;
+        border: 1px solid rgba(126, 34, 48, 0.6);
+        border-radius: 8px 8px 0 0;
+      }
+      
+      .door-panel-bottom {
+        position: absolute;
+        inset: 20px;
+        top: 45%;
+        bottom: 20px;
+        border: 1px solid rgba(126, 34, 48, 0.6);
+        border-radius: 0 0 8px 8px;
+      }
+      
+      /* Door handle */
+      .door-handle {
+        position: absolute;
+        right: 5px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 6px;
+        height: 6px;
+        background-color: #fcd34d;
+        border-radius: 50%;
+        border: 1px solid #f59e0b;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+      }
+      
+      /* Doorstep */
+      .doorstep {
+        position: absolute;
+        bottom: 0;
+        transform: translateY(100%);
+        width: 100%;
+        height: 4px;
+        background-color: #3a1a1f;
+        border-radius: 0 0 4px 4px;
+      }
+      
+      /* Monster */
+      .monster {
+        position: absolute;
+        left: 55%;
+        top: 50%;
+        transform: translate(-50%, -50%) scale(0.9);
+        width: 120px;
+        height: 120px;
+        opacity: 0;
+        transition: all 0.5s ease;
+        pointer-events: none;
+      }
+      
+      .monster.visible {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
+      
+      /* Buttons */
+      .button-container {
+        position: absolute;
+        bottom: -80px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+      }
+      
+      .doorbell-button {
+        background-color: #ef4444;
+        color: white;
+        border: none;
+        border-radius: 9999px;
+        padding: 12px 24px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      
+      .doorbell-button:hover {
+        background-color: #dc2626;
+        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        transform: scale(1.05);
+      }
+      
+      .restart-button {
+        background-color: #22c55e;
+        color: white;
+        border: none;
+        border-radius: 9999px;
+        padding: 12px 24px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.2s;
+        display: none;
+        align-items: center;
+        gap: 8px;
+      }
+      
+      .restart-button:hover {
+        background-color: #16a34a;
+        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        transform: scale(1.05);
+      }
+      
+      .sound-button {
+        background-color: transparent;
+        color: #6b7280;
+        border: none;
+        font-size: 12px;
+        cursor: pointer;
+        padding: 4px 8px;
+      }
+      
+      /* Animations */
+      @keyframes wave {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(30deg);
+        }
+      }
+      
+      .waving-arm {
+        transform-origin: 25px 45px;
+        animation: wave 0.5s ease-in-out infinite alternate;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="game-container">
+      <!-- Background wall -->
+      <div class="wall"></div>
+      
+      <!-- Door frame -->
+      <div class="door-frame">
+        <div class="door-frame-outer">
+          <div class="door-frame-inner">
+            <div class="door-frame-shadow"></div>
+          </div>
+        </div>
+        
+        <!-- Door -->
+        <div class="door" id="door">
+          <div class="door-panel-top"></div>
+          <div class="door-panel-bottom"></div>
+          <div class="door-handle"></div>
+        </div>
+        
+        <!-- Doorstep -->
+        <div class="doorstep"></div>
+      </div>
+      
+      <!-- Monster -->
+      <div class="monster" id="monster">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+          <!-- Monster body -->
+          <circle cx="50" cy="50" r="40" fill="#6366f1" />
+          
+          <!-- Monster eyes -->
+          <circle cx="35" cy="40" r="8" fill="white" />
+          <circle cx="65" cy="40" r="8" fill="white" />
+          <circle cx="35" cy="40" r="4" fill="black" />
+          <circle cx="65" cy="40" r="4" fill="black" />
+          
+          <!-- Monster mouth - smile -->
+          <path d="M 30 60 Q 50 75 70 60" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" />
+          
+          <!-- Monster arm that waves -->
+          <g id="waving-arm">
+            <path d="M 25 45 L 5 25" stroke="#6366f1" stroke-width="10" stroke-linecap="round" />
+            <path d="M 5 25 L 0 15" stroke="#6366f1" stroke-width="8" stroke-linecap="round" />
+          </g>
+          
+          <!-- Monster other arm -->
+          <path d="M 75 45 L 95 55" stroke="#6366f1" stroke-width="10" stroke-linecap="round" />
+        </svg>
+      </div>
+      
+      <!-- Buttons -->
+      <div class="button-container">
+        <button class="doorbell-button" id="doorbell-button">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8a6 6 0 0 0-9.33-5"></path>
+            <path d="m10.67 5.3-.67.8"></path>
+            <path d="M21 12v1a9 9 0 0 1-9 9h-3.8"></path>
+            <path d="M3 16.3V16a3 3 0 0 1 .4-1.5"></path>
+            <path d="m3.4 14.5-.8.67"></path>
+            <path d="M3 8a6 6 0 0 1 4.5-5.8"></path>
+            <path d="M3 12v1"></path>
+            <path d="M12 19v4"></path>
+            <path d="M12 15a2 2 0 0 0 1.8-1.2"></path>
+            <path d="M9.5 9A.5.5 0 0 0 9 9.5"></path>
+            <path d="M15 9a.5.5 0 0 1 .5.5"></path>
+            <path d="M12 13.5V14"></path>
+          </svg>
+          Ring Doorbell
+        </button>
+        <button class="restart-button" id="restart-button">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+            <path d="M3 3v5h5"></path>
+          </svg>
+          Try Again
+        </button>
+        <button class="sound-button" id="sound-button">🔊 Mute Sound</button>
+      </div>
+    </div>
+
+    <script>
+      // Game elements
+      const door = document.getElementById('door');
+      const monster = document.getElementById('monster');
+      const doorbellButton = document.getElementById('doorbell-button');
+      const restartButton = document.getElementById('restart-button');
+      const soundButton = document.getElementById('sound-button');
+      const wavingArm = document.getElementById('waving-arm');
+      
+      // Game state
+      let gamePhase = 'ready'; // ready, playing, ended
+      let isMuted = false;
+      
+      // Audio elements
+      const successSound = new Audio('https://cdn.freesound.org/previews/476/476178_6937556-lq.mp3');
+      successSound.volume = 0.5;
+      
+      // Event listeners
+      doorbellButton.addEventListener('click', handleDoorbellClick);
+      restartButton.addEventListener('click', handleRestartClick);
+      soundButton.addEventListener('click', toggleMute);
+      
+      // Handle doorbell click
+      function handleDoorbellClick() {
+        if (gamePhase === 'ready') {
+          gamePhase = 'playing';
+          console.log('Game phase changed:', gamePhase);
+          
+          // Hide doorbell button
+          doorbellButton.style.display = 'none';
+          
+          // Open the door with a slight delay
+          setTimeout(() => {
+            door.classList.add('open');
+          }, 300);
+          
+          // Show monster with a delay after door opens
+          setTimeout(() => {
+            monster.classList.add('visible');
+            wavingArm.classList.add('waving-arm');
+            playSuccessSound();
+          }, 1000);
+          
+          // End the game state after animation completes
+          setTimeout(() => {
+            gamePhase = 'ended';
+            console.log('Game phase changed:', gamePhase);
+            // Show restart button
+            restartButton.style.display = 'flex';
+            // Stop waving after a few seconds
+            setTimeout(() => {
+              wavingArm.classList.remove('waving-arm');
+            }, 3000);
+          }, 3000);
+        }
+      }
+      
+      // Handle restart click
+      function handleRestartClick() {
+        if (gamePhase === 'ended') {
+          // Reset the states
+          door.classList.remove('open');
+          monster.classList.remove('visible');
+          restartButton.style.display = 'none';
+          
+          // After a brief delay to allow animations to reset
+          setTimeout(() => {
+            gamePhase = 'ready';
+            console.log('Game phase changed:', gamePhase);
+            doorbellButton.style.display = 'flex';
+          }, 300);
+        }
+      }
+      
+      // Toggle sound mute
+      function toggleMute() {
+        isMuted = !isMuted;
+        successSound.muted = isMuted;
+        
+        if (isMuted) {
+          soundButton.textContent = '🔇 Unmute Sound';
+        } else {
+          soundButton.textContent = '🔊 Mute Sound';
+        }
+        
+        console.log(isMuted ? 'Sound muted' : 'Sound unmuted');
+      }
+      
+      // Play success sound
+      function playSuccessSound() {
+        if (!isMuted) {
+          successSound.currentTime = 0;
+          successSound.play().catch(e => console.error('Error playing sound:', e));
+        } else {
+          console.log('Success sound skipped (muted)');
+        }
+      }
+    </script>
+  </body>
+</html>

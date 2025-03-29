@@ -1,0 +1,18 @@
+<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Monster body -->
+  <circle cx="50" cy="50" r="40" fill="#6366f1" />
+  
+  <!-- Monster eyes -->
+  <circle cx="35" cy="40" r="8" fill="white" />
+  <circle cx="65" cy="40" r="8" fill="white" />
+  <circle cx="35" cy="40" r="4" fill="black" />
+  <circle cx="65" cy="40" r="4" fill="black" />
+  
+  <!-- Monster mouth -->
+  <path d="M 30 65 Q 50 80 70 65" stroke="white" stroke-width="3" stroke-linecap="round" />
+  
+  <!-- Monster arms -->
+  <path d="M 25 45 L 5 25" stroke="#6366f1" stroke-width="10" stroke-linecap="round" />
+  <path d="M 5 25 L 0 15" stroke="#6366f1" stroke-width="8" stroke-linecap="round" />
+  <path d="M 75 45 L 95 55" stroke="#6366f1" stroke-width="10" stroke-linecap="round" />
+</svg>
